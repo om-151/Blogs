@@ -1,85 +1,73 @@
-import { useState } from "react";
-import { Menu, X } from "lucide-react"; // icons
+import React, { useState } from "react";
+import { FiMenu, FiX } from "react-icons/fi";
+import { useLocation, Link } from "react-router-dom";
 
 const Navbar = () => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [navOpen, setNavOpen] = useState(false);
+    const location = useLocation();
 
-    const toggleMenu = () => setIsOpen(!isOpen);
+    const toggleMenu = () => setNavOpen(!navOpen);
+
+    const links = [
+        { name: "Home", href: "/" },
+        { name: "Blogs", href: "/blogs" },
+        { name: "About", href: "/about" },
+        { name: "Contact", href: "/contact" },
+    ];
 
     return (
-        <nav className="bg-white shadow-md fixed w-full z-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-16">
-                    {/* Logo */}
-                    <div className="flex-shrink-0 text-2xl font-bold text-purple-700">
-                        MyBlog
-                    </div>
+        <header className="w-full shadow-md fixed top-0 left-0 bg-white z-50">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+                {/* Logo */}
+                <div className="text-2xl font-bold text-[#6438C0]">
+                    <Link to="/">Blogger</Link>
+                </div>
 
-                    {/* Desktop Menu */}
-                    <div className="hidden md:flex space-x-8">
-                        <a href="/" className="text-gray-700 hover:text-purple-700 transition">
-                            Home
-                        </a>
-                        <a href="/blogs" className="text-gray-700 hover:text-purple-700 transition">
-                            Blogs
-                        </a>
-                        <a href="/about" className="text-gray-700 hover:text-purple-700 transition">
-                            About
-                        </a>
-                        <a href="/contact" className="text-gray-700 hover:text-purple-700 transition">
-                            Contact
-                        </a>
-                    </div>
-
-                    {/* Mobile Menu Button */}
-                    <div className="md:hidden">
-                        <button
-                            onClick={toggleMenu}
-                            className="text-gray-700 focus:outline-none"
+                {/* Desktop Menu */}
+                <nav className="hidden md:flex space-x-8 items-center">
+                    {links.map((link) => (
+                        <Link
+                            key={link.name}
+                            to={link.href}
+                            className={`font-medium transition-colors duration-300 ${location.pathname === link.href
+                                    ? "text-[#6438C0] underline"
+                                    : "text-gray-700 hover:text-purple-800"
+                                }`}
                         >
-                            {isOpen ? <X size={28} /> : <Menu size={28} />}
-                        </button>
-                    </div>
+                            {link.name}
+                        </Link>
+                    ))}
+                </nav>
+
+                {/* Mobile Menu Icon */}
+                <div className="md:hidden flex items-center">
+                    <button onClick={toggleMenu} className="text-2xl text-gray-700">
+                        {navOpen ? <FiX /> : <FiMenu />}
+                    </button>
                 </div>
             </div>
 
             {/* Mobile Menu */}
-            {isOpen && (
-                <div className="md:hidden bg-white shadow-md">
-                    <div className="px-4 pt-4 pb-4 space-y-2">
-                        <a
-                            href="/"
-                            className="block text-gray-700 hover:text-purple-700 transition"
-                            onClick={() => setIsOpen(false)}
+            {navOpen && (
+                <div className="md:hidden bg-white px-4 pb-4 shadow-md">
+                    {links.map((link) => (
+                        <Link
+                            key={link.name}
+                            to={link.href}
+                            className={`block py-2 font-medium transition ${location.pathname === link.href
+                                    ? "text-[#6438C0] underline"
+                                    : "text-gray-700 hover:text-purple-800"
+                                }`}
+                            onClick={() => setNavOpen(false)}
                         >
-                            Home
-                        </a>
-                        <a
-                            href="/blogs"
-                            className="block text-gray-700 hover:text-purple-700 transition"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            Blogs
-                        </a>
-                        <a
-                            href="/about"
-                            className="block text-gray-700 hover:text-purple-700 transition"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            About
-                        </a>
-                        <a
-                            href="/contact"
-                            className="block text-gray-700 hover:text-purple-700 transition"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            Contact
-                        </a>
-                    </div>
+                            {link.name}
+                        </Link>
+                    ))}
                 </div>
             )}
-        </nav>
+        </header>
     );
 };
 
 export default Navbar;
+

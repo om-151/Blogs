@@ -1,170 +1,136 @@
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
-import CountUp from "react-countup";
-import { FaQuoteLeft } from "react-icons/fa";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
-// Carousel Images
-const carouselImages = [
-    "https://picsum.photos/id/1011/1200/500",
-    "https://picsum.photos/id/1015/1200/500",
-    "https://picsum.photos/id/1016/1200/500",
-];
+// Import images properly
+import Blog1 from "../assets/Hero/BlogSlider-1.jpg";
+import Blog2 from "../assets/Hero/BlogSlider-2.jpg";
+import Blog3 from "../assets/Hero/BlogSlider-3.jpg";
+import Testimonials from "./Testimonials";
 
-// Partners Logos
-const partners = [
-    "https://dummyimage.com/120x60/000/fff&text=Google",
-    "https://dummyimage.com/120x60/000/fff&text=Microsoft",
-    "https://dummyimage.com/120x60/000/fff&text=Amazon",
-    "https://dummyimage.com/120x60/000/fff&text=Netflix",
-    "https://dummyimage.com/120x60/000/fff&text=Meta",
-    "https://dummyimage.com/120x60/000/fff&text=Adobe",
-    "https://dummyimage.com/120x60/000/fff&text=Intel",
-];
-
-// Testimonials
-const testimonials = [
-    {
-        name: "John Doe",
-        role: "Reader",
-        feedback:
-            "This blog has changed the way I think about technology. The articles are well-written and insightful.",
-        img: "https://i.pravatar.cc/100?img=1",
-    },
-    {
-        name: "Sarah Lee",
-        role: "Subscriber",
-        feedback:
-            "I love the design and readability. The content keeps me engaged every week!",
-        img: "https://i.pravatar.cc/100?img=2",
-    },
-    {
-        name: "Michael Smith",
-        role: "Writer",
-        feedback:
-            "As a contributor, I found the platform smooth and user-friendly. The community is awesome.",
-        img: "https://i.pravatar.cc/100?img=3",
-    },
-];
+const images = [Blog1, Blog2, Blog3];
 
 const Home = () => {
-    // Settings for Image Carousel
-    const heroSettings = {
+    const settings = {
         dots: true,
         infinite: true,
-        autoplay: true,
         speed: 800,
-        autoplaySpeed: 3000,
         slidesToShow: 1,
         slidesToScroll: 1,
-        arrows: true,
+        autoplay: true,
+        autoplaySpeed: 3000,
+        arrows: false,
     };
 
-    // Settings for Partners Carousel
-    const partnerSettings = {
-        dots: false,
-        infinite: true,
-        autoplay: true,
-        speed: 2000,
-        autoplaySpeed: 0,
-        slidesToShow: 4,
-        slidesToScroll: 1,
-        cssEase: "linear",
-        arrows: false,
-        responsive: [
-            { breakpoint: 1024, settings: { slidesToShow: 3 } },
-            { breakpoint: 640, settings: { slidesToShow: 2 } },
-        ],
+    const logos = [
+        "https://1000logos.net/wp-content/uploads/2020/08/Blogger-Logo.png",
+        "https://1000logos.net/wp-content/uploads/2016/10/Amazon-Logo.png",
+        "https://1000logos.net/wp-content/uploads/2017/05/Youtube-Logo.png",
+        "https://1000logos.net/wp-content/uploads/2020/08/Blogger-Logo-1999.png",
+        "https://1000logos.net/wp-content/uploads/2021/05/Google-logo.png",
+    ];
+    const REPEAT_COUNT = 50;
+    const repeatedLogos = Array(REPEAT_COUNT).fill(logos).flat();
+
+    const Counter = ({ target, duration = 2000, title, suffix = "+" }) => {
+        const [count, setCount] = useState(0);
+
+        useEffect(() => {
+            let start = 0;
+            const increment = target / (duration / 10);
+
+            const counter = setInterval(() => {
+                start += increment;
+                if (start >= target) {
+                    start = target;
+                    clearInterval(counter);
+                }
+                setCount(Math.floor(start));
+            }, 10);
+
+            return () => clearInterval(counter);
+        }, [target, duration]);
+
+        return (
+            <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-md">
+                <h2 className="text-4xl font-bold text-[#6438C0] flex items-start">
+                    <span className="inline-flex items-center">
+                        <span>{count}</span>
+                        {count === target && (
+                            <span className="text-2xl ml-1">{suffix}</span>
+                        )}
+                    </span>
+                </h2>
+                {title && <p className="mt-2 text-gray-600 text-lg">{title}</p>}
+            </div>
+        );
     };
 
     return (
-        <div className="mt-16">
-            {/* ---------- Image Carousel ---------- */}
-            <Slider {...heroSettings}>
-                {carouselImages.map((img, idx) => (
-                    <div key={idx}>
-                        <img
-                            src={img}
-                            alt={`slide-${idx}`}
-                            className="w-full h-[400px] md:h-[500px] object-cover"
-                        />
-                    </div>
-                ))}
-            </Slider>
-
-            {/* ---------- Our Achievements ---------- */}
-            <section className="py-16 bg-gray-50 text-center">
-                <h2 className="text-3xl font-bold mb-10">Our Achievements</h2>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
-                    <div>
-                        <h3 className="text-4xl font-bold text-purple-600">
-                            <CountUp end={500} duration={3} />+
-                        </h3>
-                        <p className="text-gray-600">Blogs Published</p>
-                    </div>
-                    <div>
-                        <h3 className="text-4xl font-bold text-purple-600">
-                            <CountUp end={20000} duration={3} />+
-                        </h3>
-                        <p className="text-gray-600">Active Readers</p>
-                    </div>
-                    <div>
-                        <h3 className="text-4xl font-bold text-purple-600">
-                            <CountUp end={100} duration={3} />+
-                        </h3>
-                        <p className="text-gray-600">Contributors</p>
-                    </div>
-                    <div>
-                        <h3 className="text-4xl font-bold text-purple-600">
-                            <CountUp end={50} duration={3} />+
-                        </h3>
-                        <p className="text-gray-600">Countries Reached</p>
-                    </div>
-                </div>
-            </section>
-
-            {/* ---------- Our Partners ---------- */}
-            <section className="py-16 text-center bg-white">
-                <h2 className="text-3xl font-bold mb-10">Our Partners</h2>
-                <div className="max-w-6xl mx-auto">
-                    <Slider {...partnerSettings}>
-                        {partners.map((logo, idx) => (
-                            <div key={idx} className="flex justify-center">
-                                <img
-                                    src={logo}
-                                    alt="partner"
-                                    className="h-16 object-contain grayscale hover:grayscale-0 transition"
-                                />
-                            </div>
-                        ))}
-                    </Slider>
-                </div>
-            </section>
-
-            {/* ---------- Testimonials ---------- */}
-            <section className="py-16 bg-gray-50 text-center">
-                <h2 className="text-3xl font-bold mb-10">Testimonials</h2>
-                <div className="grid gap-8 md:grid-cols-3 max-w-6xl mx-auto">
-                    {testimonials.map((t, idx) => (
-                        <div
-                            key={idx}
-                            className="bg-white shadow-md rounded-xl p-6 hover:shadow-lg transition text-left"
-                        >
-                            <FaQuoteLeft className="text-purple-600 text-2xl mb-4" />
-                            <p className="italic text-gray-600 mb-4">"{t.feedback}"</p>
-                            <div className="flex items-center gap-4">
-                                <img
-                                    src={t.img}
-                                    alt={t.name}
-                                    className="w-14 h-14 rounded-full"
-                                />
-                                <div>
-                                    <h4 className="font-semibold text-gray-800">{t.name}</h4>
-                                    <span className="text-sm text-gray-500">{t.role}</span>
-                                </div>
-                            </div>
+        <div className="w-full">
+            {/* Slider Section */}
+            <div className="w-full">
+                <Slider {...settings}>
+                    {images.map((img, index) => (
+                        <div key={index}>
+                            <img
+                                src={img}
+                                alt={`Slide ${index + 1}`}
+                                className="w-full h-[500px] object-cover"
+                            />
                         </div>
                     ))}
+                </Slider>
+            </div>
+            <div className="py-16 bg-gray-100">
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h2 className="text-3xl font-bold text-center mb-10">Our Achievements</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                        <Counter target={1000} title="Users" suffix="+" />
+                        <Counter target={250} title="Blogs Published" />
+                        <Counter target={50} title="Awards Won" />
+                        <Counter target={120} title="Contributors" />
+                    </div>
                 </div>
-            </section>
+            </div>
+            <div className="w-full bg-gray-100 py-10 overflow-hidden">
+                <h2 className="text-3xl font-bold text-center mb-8">Our Partners</h2>
+
+                {/* Scrolling wrapper */}
+                <div className="overflow-hidden relative">
+                    {/* Moving track */}
+                    <div className="scrolling-track flex gap-12">
+                        {repeatedLogos.map((logo, index) => (
+                            <img
+                                key={index}
+                                src={logo}
+                                alt={`Partner ${index + 1}`}
+                                className="h-16 w-auto object-contain"
+                            />
+                        ))}
+                    </div>
+                </div>
+
+                {/* Inline animation CSS */}
+                <style>{`
+                .scrolling-track {
+                    display: flex;
+                    width: calc(200%); /* important for seamless looping */
+                    animation: scrollLeft 25s linear infinite;
+                }
+
+                @keyframes scrollLeft {
+                    0% {
+                        transform: translateX(0);
+                    }
+                    100% {
+                        transform: translateX(-50%);
+                    }
+                }
+            `}</style>
+            </div>
+            <Testimonials />
         </div>
     );
 };
