@@ -6,7 +6,7 @@ const ContactPage = () => {
             {/* Header */}
             <section className="text-center py-10 px-6">
                 <h1 className="text-4xl md:text-5xl font-bold text-gray-800">
-                    Get in <span className="text-indigo-600">Touch</span>
+                    Get in <span className="text-purple-800">Touch</span>
                 </h1>
                 <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
                     We’d love to hear from you! Fill out the form below or reach out directly to connect with our team.
@@ -26,7 +26,7 @@ const ContactPage = () => {
                             <input
                                 type="text"
                                 placeholder="Your Name"
-                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                                className="w-full px-4 py-3 rounded-lg border focus:outline-none border-gray-300 focus:ring-1 focus:ring-purple-800 focus:border-purple-800 transition"
                             />
                         </div>
                         <div>
@@ -34,7 +34,7 @@ const ContactPage = () => {
                             <input
                                 type="email"
                                 placeholder="Your Email"
-                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                                className="w-full px-4 py-3 rounded-lg border focus:outline-none border-gray-300 focus:ring-1 focus:ring-purple-800 focus:border-purple-800 transition"
                             />
                         </div>
                         <div>
@@ -42,7 +42,7 @@ const ContactPage = () => {
                             <textarea
                                 rows="4"
                                 placeholder="Write your message..."
-                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                                className="w-full px-4 py-3 rounded-lg border focus:outline-none border-gray-300 focus:ring-1 focus:ring-purple-800 focus:border-purple-800 transition"
                             ></textarea>
                         </div>
                         <button
