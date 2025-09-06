@@ -7,14 +7,14 @@ export default function Sidebar({ setIsAuthenticated }) {
     const navigate = useNavigate();
 
     const handleLogout = () => {
+        localStorage.removeItem("token");
         setIsAuthenticated(false);
-        navigate("/");
+        navigate("/", { replace: true });
     };
 
     return (
         <div
-            className={`${isOpen ? "w-64" : "w-20"
-                } h-screen bg-indigo-700 text-white flex flex-col transition-all duration-300`}
+            className={`${isOpen ? "w-64" : "w-20"} h-screen bg-indigo-700 text-white flex flex-col transition-all duration-300`}
         >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-indigo-500">
@@ -29,20 +29,20 @@ export default function Sidebar({ setIsAuthenticated }) {
 
             {/* Nav Links */}
             <nav className="flex-1 p-4 space-y-2">
-                <a
-                    href="#"
-                    className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-indigo-600 transition"
+                <button
+                    onClick={() => navigate("/dashboard")}
+                    className="flex items-center gap-3 w-full px-4 py-2 rounded-lg hover:bg-indigo-600 transition text-left"
                 >
                     <LayoutDashboard size={20} />
                     {isOpen && "Dashboard"}
-                </a>
-                <a
-                    href="#"
-                    className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-indigo-600 transition"
+                </button>
+                <button
+                    onClick={() => navigate("/dashboard/blogs")}
+                    className="flex items-center gap-3 w-full px-4 py-2 rounded-lg hover:bg-indigo-600 transition text-left"
                 >
                     <FileText size={20} />
                     {isOpen && "Blog Management"}
-                </a>
+                </button>
             </nav>
 
             {/* Logout */}
