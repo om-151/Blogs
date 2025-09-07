@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import "@yaireo/tagify/dist/tagify.css";
@@ -6,6 +7,9 @@ import Tags from "@yaireo/tagify/dist/react.tagify";
 
 const BlogForm = ({ initialData = {}, onSubmit }) => {
     const API_BASE = "http://localhost:5000";
+    const navigate = useNavigate();
+    const quillRef = useRef();
+
     const [title, setTitle] = useState(initialData.title || "");
     const [slug, setSlug] = useState(initialData.slug || "");
     const [description, setDescription] = useState(initialData.description || "");
@@ -20,13 +24,15 @@ const BlogForm = ({ initialData = {}, onSubmit }) => {
 
     // Auto-generate slug from title
     useEffect(() => {
-        if (title) {
+        if (title.trim()) {
             setSlug(
                 title
                     .toLowerCase()
                     .replace(/\s+/g, "-")
                     .replace(/[^\w-]/g, "")
             );
+        } else {
+            setSlug("");
         }
     }, [title]);
 
@@ -37,7 +43,7 @@ const BlogForm = ({ initialData = {}, onSubmit }) => {
         }
     }, [initialData]);
 
-    // Handle image upload
+    // Handle image upload in featured image section
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -73,11 +79,49 @@ const BlogForm = ({ initialData = {}, onSubmit }) => {
             formData.append("featuredImage", image);
         }
 
-        onSubmit(formData); // parent handles API call
+        onSubmit(formData);
     };
 
+    // Handle image insertion in ReactQuill editor
+    const handleInsertImage = () => {
+        const input = document.createElement("input");
+        input.setAttribute("type", "file");
+        input.setAttribute("accept", "image/*");
+        input.click();
+
+        input.onchange = () => {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const quill = quillRef.current.getEditor();
+                    const range = quill.getSelection();
+                    quill.insertEmbed(range.index, "image", reader.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+    };
+
+    const modules = {
+        toolbar: {
+            container: [
+                [{ header: [1, 2, false] }],
+                ["bold", "italic", "underline"],
+                [{ list: "ordered" }, { list: "bullet" }],
+                ["link", "image"],
+                ["clean"]
+            ],
+            handlers: {
+                image: handleInsertImage
+            }
+        }
+    };
+
+    const commonInputClass = "w-full p-2 border rounded focus:ring-2 focus:ring-purple-500 border-gray-300";
+
     return (
-        <form onSubmit={handleSubmit} className="max-w-3xl p-4 space-y-6">
+        <form onSubmit={handleSubmit} className="max-w-3xl p-4 space-y-6 bg-white">
             <h2 className="text-2xl font-semibold mb-4">
                 {initialData._id ? "Update Blog" : "Create Blog"}
             </h2>
@@ -89,7 +133,7 @@ const BlogForm = ({ initialData = {}, onSubmit }) => {
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    className="w-full p-2 border rounded focus:ring-2 focus:ring-purple-500"
+                    className={commonInputClass}
                 />
                 {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
             </div>
@@ -101,7 +145,7 @@ const BlogForm = ({ initialData = {}, onSubmit }) => {
                     type="text"
                     value={slug}
                     readOnly
-                    className="w-full p-2 border rounded bg-gray-100 text-gray-600 cursor-not-allowed"
+                    className={`${commonInputClass} bg-gray-100 text-gray-600 cursor-not-allowed`}
                 />
             </div>
 
@@ -112,7 +156,7 @@ const BlogForm = ({ initialData = {}, onSubmit }) => {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     rows="3"
-                    className="w-full p-2 border rounded focus:ring-2 focus:ring-purple-500"
+                    className={`${commonInputClass} resize-none`}
                 />
                 {errors.description && (
                     <p className="text-red-500 text-sm">{errors.description}</p>
@@ -123,9 +167,11 @@ const BlogForm = ({ initialData = {}, onSubmit }) => {
             <div>
                 <label className="block mb-1 font-medium">Content</label>
                 <ReactQuill
+                    ref={quillRef}
                     value={content}
                     onChange={setContent}
                     theme="snow"
+                    modules={modules}
                     className="bg-white"
                 />
                 {errors.content && (
@@ -141,13 +187,12 @@ const BlogForm = ({ initialData = {}, onSubmit }) => {
                     onChange={(e) =>
                         setTags(e.detail.tagify.value.map((tag) => tag.value))
                     }
-                    className="w-full border rounded p-2"
+                    className={commonInputClass}
                 />
                 {errors.tags && <p className="text-red-500 text-sm">{errors.tags}</p>}
             </div>
 
-            {/* Image Uploader */}
-            {/* Image Uploader */}
+            {/* Featured Image */}
             <div>
                 <label className="block mb-1 font-medium">Featured Image</label>
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center text-gray-500 hover:border-purple-500 transition cursor-pointer">
@@ -173,13 +218,22 @@ const BlogForm = ({ initialData = {}, onSubmit }) => {
                 {errors.image && <p className="text-red-500 text-sm">{errors.image}</p>}
             </div>
 
-            {/* Submit */}
-            <button
-                type="submit"
-                className="bg-purple-700 text-white px-6 py-2 rounded-lg hover:bg-purple-600 transition"
-            >
-                {initialData._id ? "Update Blog" : "Create Blog"}
-            </button>
+            {/* Submit & Cancel Buttons */}
+            <div className="flex gap-4">
+                <button
+                    type="submit"
+                    className="bg-purple-700 text-white px-6 py-2 rounded-lg hover:bg-purple-600 transition"
+                >
+                    {initialData._id ? "Update Blog" : "Create Blog"}
+                </button>
+                <button
+                    type="button"
+                    onClick={() => navigate("/dashboard/blogs")}
+                    className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition"
+                >
+                    Cancel
+                </button>
+            </div>
         </form>
     );
 };

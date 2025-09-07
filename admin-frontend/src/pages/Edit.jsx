@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import BlogForm from "./Forms";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const EditBlogPage = () => {
     const { id } = useParams();
     const token = localStorage.getItem("token");
     const [blog, setBlog] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios
@@ -26,6 +28,7 @@ const EditBlogPage = () => {
                 },
             });
             alert("Blog updated successfully!");
+            navigate("/dashboard/blogs")
         } catch (err) {
             console.error("Error updating blog:", err);
         }

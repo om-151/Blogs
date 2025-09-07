@@ -1,8 +1,10 @@
 import BlogForm from "./Forms";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const CreateBlogPage = () => {
     const token = localStorage.getItem("token");
+    const navigate = useNavigate();
 
     const handleCreate = async (formData) => {
         try {
@@ -13,6 +15,7 @@ const CreateBlogPage = () => {
                 },
             });
             alert("Blog created successfully!");
+            navigate("/dashboard/blogs")
         } catch (err) {
             console.error("Error creating blog:", err);
         }

@@ -2,15 +2,14 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { PlusCircleIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 const BlogManagement = () => {
     const [blogs, setBlogs] = useState([]);
     const navigate = useNavigate();
 
-    // Get token from localStorage
     const token = localStorage.getItem("token");
 
-    // Axios instance with Authorization header
     const axiosInstance = axios.create({
         baseURL: "http://localhost:5000/api",
         headers: {
@@ -18,7 +17,6 @@ const BlogManagement = () => {
         },
     });
 
-    // Fetch blogs
     const fetchBlogs = async () => {
         try {
             const res = await axiosInstance.get("/blogs");
@@ -32,20 +30,30 @@ const BlogManagement = () => {
         fetchBlogs();
     }, []);
 
-    // Handle Delete
     const handleDelete = async (id) => {
         if (window.confirm("Are you sure you want to delete this blog?")) {
             try {
                 await axiosInstance.delete(`/blogs/${id}`);
-                fetchBlogs(); // refresh list after delete
+                fetchBlogs();
             } catch (err) {
                 console.error("Error deleting blog:", err);
             }
         }
     };
 
-    // Table Columns
     const columns = [
+        {
+            name: "Image",
+            selector: (row) => row.featuredImage,
+            cell: (row) => (
+                <img
+                    src={`http://localhost:5000${row.featuredImage}`}
+                    alt={row.title}
+                    className="w-16 h-16 object-cover rounded-md"
+                />
+            ),
+            width: "100px",
+        },
         {
             name: "Title",
             selector: (row) => row.title,
@@ -72,18 +80,20 @@ const BlogManagement = () => {
         {
             name: "Actions",
             cell: (row) => (
-                <div className="flex gap-2">
+                <div className="flex gap-3">
                     <button
                         onClick={() => navigate(`/dashboard/blogs/edit/${row._id}`)}
-                        className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        className="text-blue-600 hover:text-blue-800 cursor-pointer"
+                        title="Edit Blog"
                     >
-                        Update
+                        <PencilIcon className="w-5 h-5" />
                     </button>
                     <button
                         onClick={() => handleDelete(row._id)}
-                        className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                        className="text-red-600 hover:text-red-800 cursor-pointer"
+                        title="Delete Blog"
                     >
-                        Delete
+                        <TrashIcon className="w-5 h-5" />
                     </button>
                 </div>
             ),
@@ -91,27 +101,31 @@ const BlogManagement = () => {
     ];
 
     return (
-        <div className="p-6">
-            {/* Header with Create Button */}
-            <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-semibold">Blog Management</h2>
+        <div className="p-6 bg-gray-50 min-h-screen">
+            {/* Header */}
+            <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-semibold text-gray-700">Blog Management</h2>
                 <button
                     onClick={() => navigate("/dashboard/blogs/create")}
-                    className="px-4 py-2 bg-purple-800 text-white rounded-lg hover:bg-purple-500 hover:cursor-pointer"
+                    className="flex items-center gap-2 bg-purple-700 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition"
                 >
-                    Create
+                    <PlusCircleIcon className="w-5 h-5" />
+                    <span>Create</span>
                 </button>
             </div>
 
-            {/* Blog Table */}
-            <DataTable
-                columns={columns}
-                data={blogs}
-                pagination
-                highlightOnHover
-                striped
-                responsive
-            />
+            {/* DataTable */}
+            <div className="bg-white rounded-lg shadow-md p-4">
+                <DataTable
+                    columns={columns}
+                    data={blogs}
+                    pagination
+                    highlightOnHover
+                    striped
+                    responsive
+                    noHeader
+                />
+            </div>
         </div>
     );
 };
