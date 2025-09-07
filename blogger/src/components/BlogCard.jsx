@@ -11,11 +11,11 @@ export default function BlogCard({ blog }) {
                 className="w-full h-40 object-cover"
             />
             <div className="p-4">
-                <h3 className="text-lg font-semibold text-purple-700">{blog.title}</h3>
-                <p className="text-gray-600 text-sm mt-2">{blog.description}</p>
+                <h3 className="text-lg font-semibold text-purple-700 line-clamp-2">{blog.title}</h3>
+                <p className="text-gray-600 text-sm mt-2 line-clamp-3">{blog.description}</p>
                 <button
                     onClick={() => navigate(`/blogs/${blog._id || blog.id}`)}
-                    className="mt-4 inline-block bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-800"
+                    className="mt-4 inline-block bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-800 hover:cursor-pointer"
                 >
                     Read More
                 </button>

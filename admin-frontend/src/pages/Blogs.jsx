@@ -52,35 +52,54 @@ const BlogManagement = () => {
                     className="w-16 h-16 object-cover rounded-md"
                 />
             ),
-            width: "100px",
+            width: "80px",
         },
         {
             name: "Title",
             selector: (row) => row.title,
             sortable: true,
+            grow: 1,
+            width: "400px",
         },
         {
             name: "Slug",
             selector: (row) => row.slug,
+            grow: 0,
+            width: "120px",
         },
         {
             name: "Description",
             selector: (row) => row.description,
-            wrap: true,
+            cell: (row) => (
+                <div className="overflow-hidden whitespace-nowrap text-ellipsis">
+                    {row.description}
+                </div>
+            ),
+            width: "250px",
+            grow: 2,
         },
         {
             name: "Author",
             selector: (row) => row.author?.name || "Unknown",
+            cell: (row) => (
+                <div className="max-w-[100px] overflow-hidden whitespace-nowrap text-ellipsis">
+                    {row.author?.name || "Unknown"}
+                </div>
+            ),
+            width: "100px",
+            grow: 0,
         },
         {
             name: "Created At",
             selector: (row) => new Date(row.createdAt).toLocaleString(),
             sortable: true,
+            grow: 0,
+            width: "150px",
         },
         {
             name: "Actions",
             cell: (row) => (
-                <div className="flex gap-3">
+                <div className="flex gap-2 justify-center">
                     <button
                         onClick={() => navigate(`/dashboard/blogs/edit/${row._id}`)}
                         className="text-blue-600 hover:text-blue-800 cursor-pointer"
@@ -97,6 +116,8 @@ const BlogManagement = () => {
                     </button>
                 </div>
             ),
+            width: "80px",
+            grow: 0,
         },
     ];
 

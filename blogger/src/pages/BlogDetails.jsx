@@ -23,42 +23,45 @@ export default function BlogDetails() {
     }, [id]);
 
     if (loading) {
-        return <div className="text-center text-gray-500 mt-10">Loading...</div>;
+        return <div className="text-center text-gray-500 mt-20">Loading...</div>;
     }
 
     if (error) {
-        return <div className="text-center text-red-500 mt-10">{error}</div>;
+        return <div className="text-center text-red-500 mt-20">{error}</div>;
     }
 
     return (
-        <div className="max-w-3xl mx-auto p-6 bg-gray-100 min-h-screen">
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="bg-gradient-to-b from-gray-50 via-white to-gray-100 text-gray-800 mt-15">
+            <header className="relative w-full h-100 overflow-hidden bg-gray-200">
                 <img
-                    src={blog.featuredImage ? `http://localhost:5000${blog.featuredImage}` : "https://via.placeholder.com/600x300"}
+                    src={blog.featuredImage ? `http://localhost:5000${blog.featuredImage}` : "https://via.placeholder.com/1200x500"}
                     alt={blog.title}
-                    className="w-full h-64 object-cover"
+                    className="w-full h-full object-cover object-center transform transition-transform duration-500 hover:scale-105"
                 />
-                <div className="p-6">
-                    <h1 className="text-3xl font-bold text-purple-700 mb-3">{blog.title}</h1>
-
-                    <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
-                        <div>By <span className="font-medium">{blog.author.name}</span></div>
-                        <div>• {new Date(blog.createdAt).toLocaleDateString()}</div>
-                        <div>• {blog.published ? "Published" : "Draft"}</div>
-                    </div>
-
-                    <p className="text-gray-700 mb-4">{blog.description}</p>
-
-                    <div className="prose prose-sm sm:prose lg:prose-lg max-w-none">
-                        <div dangerouslySetInnerHTML={{ __html: blog.content }} />
-                    </div>
-
-                    <div className="mt-6 text-right text-gray-400 text-xs">
-                        Last updated: {new Date(blog.updatedAt).toLocaleString()}
+                <div className="absolute inset-0 bg-black/50 bg-opacity-20"></div>
+                <div className="absolute bottom-6 left-6 text-white">
+                    <h1 className="text-4xl md:text-5xl font-semibold">{blog.title}</h1>
+                    <div className="mt-2 flex flex-wrap gap-4 text-sm md:text-base opacity-90">
+                        <span>By <span className="font-semibold">{blog.author.name}</span></span>
+                        <span>• {new Date(blog.createdAt).toLocaleDateString()}</span>
+                        <span>• {blog.published ? "Published" : "Draft"}</span>
                     </div>
                 </div>
-            </div>
+            </header>
+
+            <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+                <section>
+                    <p className="text-lg text-gray-700">{blog.description}</p>
+                </section>
+
+                <section className="prose prose-sm sm:prose lg:prose-lg mx-auto max-w-none">
+                    <div dangerouslySetInnerHTML={{ __html: blog.content }} />
+                </section>
+
+                <section className="text-sm text-gray-500 border-t border-gray-300 pt-4">
+                    Last updated: {new Date(blog.updatedAt).toLocaleString()}
+                </section>
+            </main>
         </div>
     );
 }
-    
