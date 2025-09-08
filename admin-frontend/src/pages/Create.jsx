@@ -1,6 +1,7 @@
 import BlogForm from "./Forms";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 const CreateBlogPage = () => {
     const token = localStorage.getItem("token");
@@ -14,10 +15,27 @@ const CreateBlogPage = () => {
                     "Content-Type": "multipart/form-data",
                 },
             });
-            alert("Blog created successfully!");
-            navigate("/dashboard/blogs")
+
+            // Show success message using SweetAlert2
+            Swal.fire({
+                title: 'Success!',
+                text: 'Blog created successfully!',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                navigate("/dashboard/blogs"); // Navigate after user confirms
+            });
+
         } catch (err) {
             console.error("Error creating blog:", err);
+
+            // Show error message using SweetAlert2
+            Swal.fire({
+                title: 'Error!',
+                text: 'There was an error creating the blog.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         }
     };
 

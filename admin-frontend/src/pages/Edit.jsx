@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import BlogForm from "./Forms";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Swal from 'sweetalert2';
 
 const EditBlogPage = () => {
     const { id } = useParams();
@@ -20,6 +21,14 @@ const EditBlogPage = () => {
     }, [id, token]);
 
     const handleUpdate = async (formData) => {
+        Swal.fire({
+            title: 'Updating blog...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
         try {
             await axios.put(`http://localhost:5000/api/blogs/${id}`, formData, {
                 headers: {
@@ -27,10 +36,25 @@ const EditBlogPage = () => {
                     "Content-Type": "multipart/form-data",
                 },
             });
-            alert("Blog updated successfully!");
-            navigate("/dashboard/blogs")
+
+            Swal.fire({
+                title: 'Success!',
+                text: 'Blog updated successfully!',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                navigate("/dashboard/blogs");
+            });
+
         } catch (err) {
             console.error("Error updating blog:", err);
+
+            Swal.fire({
+                title: 'Error!',
+                text: 'There was an error updating the blog.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         }
     };
 

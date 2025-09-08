@@ -3,6 +3,7 @@ import DataTable from "react-data-table-component";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { PlusCircleIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+import Swal from 'sweetalert2';
 
 const BlogManagement = () => {
     const [blogs, setBlogs] = useState([]);
@@ -31,12 +32,33 @@ const BlogManagement = () => {
     }, []);
 
     const handleDelete = async (id) => {
-        if (window.confirm("Are you sure you want to delete this blog?")) {
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        });
+
+        if (result.isConfirmed) {
             try {
                 await axiosInstance.delete(`/blogs/${id}`);
+                Swal.fire(
+                    'Deleted!',
+                    'Your blog has been deleted.',
+                    'success'
+                );
                 fetchBlogs();
             } catch (err) {
                 console.error("Error deleting blog:", err);
+                Swal.fire(
+                    'Error!',
+                    'There was an error deleting the blog.',
+                    'error'
+                );
             }
         }
     };
