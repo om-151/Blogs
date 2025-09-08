@@ -222,14 +222,14 @@ const BlogForm = ({ initialData = {}, onSubmit }) => {
             <div className="flex gap-4">
                 <button
                     type="submit"
-                    className="bg-purple-700 text-white px-6 py-2 rounded-lg hover:bg-purple-600 transition"
+                    className="bg-purple-700 text-white px-6 py-2 rounded-lg hover:bg-purple-600 transition cursor-pointer"
                 >
                     {initialData._id ? "Update Blog" : "Create Blog"}
                 </button>
                 <button
                     type="button"
                     onClick={() => navigate("/dashboard/blogs")}
-                    className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition"
+                    className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition cursor-pointer"
                 >
                     Cancel
                 </button>

@@ -1,6 +1,7 @@
 import { LayoutDashboard, FileText, Menu, LogOut } from "lucide-react";
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 export default function Sidebar({ setIsAuthenticated }) {
     const [isOpen, setIsOpen] = useState(true);
@@ -8,9 +9,30 @@ export default function Sidebar({ setIsAuthenticated }) {
     const location = useLocation();
 
     const handleLogout = () => {
-        localStorage.removeItem("token");
-        setIsAuthenticated(false);
-        navigate("/", { replace: true });
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will be logged out!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#6438C0',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, logout!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.removeItem("token");
+                setIsAuthenticated(false);
+                navigate("/", { replace: true });
+
+                MySwal.fire({
+                    title: 'Logged out!',
+                    text: 'You have been logged out successfully.',
+                    icon: 'success',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            }
+        });
     };
 
     // Helper to check if path is active

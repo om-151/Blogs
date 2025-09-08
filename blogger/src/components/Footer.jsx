@@ -70,10 +70,10 @@ const Footer = () => {
                     <div>
                         <h3 className="text-[#6438C0] text-lg font-semibold mb-4">Blog Categories</h3>
                         <ul className="space-y-2 text-sm">
-                            <li><a href="/blogs/68a4a54439d0160c17e8f754" className="hover:text-purple-800 transition">AI</a></li>
-                            <li><a href="/blogs/68a4aa5c39d0160c17e8f7a6" className="hover:text-purple-800 transition">Politics</a></li>
-                            <li><a href="/blogs/68a4b0e739d0160c17e8f804" className="hover:text-purple-800 transition">Business</a></li>
-                            <li><a href="/blogs/68a4b26339d0160c17e8f828" className="hover:text-purple-800 transition">Science</a></li>
+                            <li><a href="/blogs/68bda1d3090b089ec665b43b" className="hover:text-purple-800 transition">AI</a></li>
+                            <li><a href="/blogs/68bda2f9090b089ec665b45f" className="hover:text-purple-800 transition">Politics</a></li>
+                            <li><a href="/blogs/68beed711b7a2615a0de3be1" className="hover:text-purple-800 transition">Business</a></li>
+                            <li><a href="/blogs/68beef081b7a2615a0de3bf9" className="hover:text-purple-800 transition">Science</a></li>
                         </ul>
                     </div>
 
