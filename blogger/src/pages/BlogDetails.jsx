@@ -31,7 +31,7 @@ export default function BlogDetails() {
     }
 
     return (
-        <div className="bg-gradient-to-b from-gray-50 via-white to-gray-100 text-gray-800 mt-15">
+        <div className="bg-gradient-to-b from-gray-50 via-white to-gray-100 text-gray-800 mt-16">
             <header className="relative w-full h-100 overflow-hidden bg-gray-200">
                 <img
                     src={blog.featuredImage ? `http://localhost:5000${blog.featuredImage}` : "https://via.placeholder.com/1200x500"}

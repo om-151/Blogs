@@ -34,7 +34,7 @@ export default function BlogCard({ blog }) {
                 className="w-full h-40 object-cover"
             />
             <div className="p-4">
-                <h3 className="text-lg font-semibold text-[#6438C0] line-clamp-2">{blog.title}</h3>
+                <h3 className="text-lg font-semibold text-[#946beb] line-clamp-2">{blog.title}</h3>
                 <p className="text-gray-600 text-sm mt-2 line-clamp-3">{blog.description}</p>
                 <div className="flex justify-between items-center text-gray-500 text-sm mt-2">
                     <p>By <span className="font-medium text-gray-700">{blog.author.name}</span></p>
@@ -42,10 +42,10 @@ export default function BlogCard({ blog }) {
                 </div>
                 <button
                     onClick={() => navigate(`/blogs/${blog._id || blog.id}`)}
-                    className="mt-4 relative inline-block px-4 py-2 rounded-lg border-2 border-purple-600 text-purple-600 overflow-hidden group hover:cursor-pointer"
+                    className="mt-4 relative inline-block px-2 py-1 rounded-lg border-2 border-purple-600 text-purple-600 overflow-hidden group hover:cursor-pointer"
                 >
                     <span className="absolute inset-0 bg-purple-600 transform translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out"></span>
-                    <span className="relative group-hover:text-white transition-colors duration-300 ease-out">
+                    <span className="relative text-sm group-hover:text-white transition-colors duration-300 ease-out">
                         Read More
                     </span>
                 </button>
