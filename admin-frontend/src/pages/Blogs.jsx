@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { PlusCircleIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { PlusIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import Swal from 'sweetalert2';
 
 const BlogManagement = () => {
@@ -152,7 +152,7 @@ const BlogManagement = () => {
                     onClick={() => navigate("/dashboard/blogs/create")}
                     className="flex items-center gap-2 bg-purple-700 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition cursor-pointer"
                 >
-                    <PlusCircleIcon className="w-5 h-5" />
+                    <PlusIcon className="w-5 h-5" />
                     <span>Create</span>
                 </button>
             </div>
