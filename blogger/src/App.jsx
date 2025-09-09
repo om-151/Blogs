@@ -6,11 +6,13 @@ import Blogs from "./pages/Blogs";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import BlogsDetails from "./pages/BlogDetails";
+import ScrollToTop from "./pages/ScrollToTop";
 
 function App() {
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
+        <ScrollToTop />
         <Navbar />
         <main className="flex-grow">
           <Routes>

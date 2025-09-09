@@ -85,7 +85,7 @@ export default function Login({ setIsAuthenticated }) {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-gradient-to-r from-pink-500 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:opacity-90 transition"
+                        className="w-full bg-gradient-to-r from-pink-500 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:opacity-90 transition cursor-pointer"
                     >
                         {loading ? "Signing in..." : "SIGN IN"}
                     </button>

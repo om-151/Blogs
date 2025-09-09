@@ -71,10 +71,10 @@ const BlogManagement = () => {
                 <img
                     src={`http://localhost:5000${row.featuredImage}`}
                     alt={row.title}
-                    className="w-16 h-16 object-cover rounded-md"
+                    className="w-32 h-16 object-cover rounded-md p-2"
                 />
             ),
-            width: "80px",
+            // width: "100px",
         },
         {
             name: "Title",
@@ -104,11 +104,11 @@ const BlogManagement = () => {
             name: "Author",
             selector: (row) => row.author?.name || "Unknown",
             cell: (row) => (
-                <div className="max-w-[100px] overflow-hidden whitespace-nowrap text-ellipsis">
+                <div className="max-w-[80px] overflow-hidden whitespace-nowrap text-ellipsis">
                     {row.author?.name || "Unknown"}
                 </div>
             ),
-            width: "100px",
+            width: "80px",
             grow: 0,
         },
         {
