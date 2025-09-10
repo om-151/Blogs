@@ -29,8 +29,6 @@ This repository contains multiple projects and modules for different purposes, s
 - **Version Control:** Git  
 - **Editor:** Visual Studio Code  
 
-*(Adjust technologies as per your actual stack.)*
-
 ---
 
 ## 🚀 Getting Started
@@ -39,14 +37,18 @@ This repository contains multiple projects and modules for different purposes, s
    ```bash
    git clone https://github.com/om-151/Blogs.git
 
-cd admin-backend
-npm install
-npm run dev
+- cd admin-backend
+- npm install
+- npm run dev
 
-cd admin-frontend
-npm install
-npm run dev
+---
 
-cd blogger
-npm install
-npm run dev
+- cd admin-frontend
+- npm install
+- npm run dev
+
+---
+
+- cd blogger
+- npm install
+- npm run dev
