@@ -12,6 +12,8 @@ export default function Blogs() {
 
     useEffect(() => {
         const fetchBlogs = async () => {
+            setLoading(true);
+            setError("");
             try {
                 const res = await axios.get("http://localhost:5000/api/blogs");
                 setBlogs(res.data);
@@ -20,17 +22,17 @@ export default function Blogs() {
                 const tags = res.data.flatMap((blog) => blog.tags || []);
                 const uniqueTags = [...new Set(tags)];
                 setAllTags(uniqueTags);
-
-                setLoading(false);
             } catch (err) {
-                setError("Failed to load blogs.");
+                setError("Failed to load blogs. Please try again.");
+            } finally {
                 setLoading(false);
             }
         };
+
         fetchBlogs();
     }, []);
 
-    // Filter blogs based on search and tag
+    // Filter blogs based on search term and selected tag
     const filteredBlogs = blogs.filter((blog) => {
         const titleMatch = blog.title?.toLowerCase().includes(searchTerm.toLowerCase());
         const descMatch = blog.description?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -45,7 +47,6 @@ export default function Blogs() {
 
             {/* Search and Filter Controls */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
-                {/* Search Field */}
                 <input
                     type="text"
                     placeholder="Search blogs..."
@@ -54,11 +55,10 @@ export default function Blogs() {
                     className="w-full max-w-md p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#6438C0]"
                 />
 
-                {/* Tag Filter Dropdown */}
                 <select
                     value={selectedTag}
                     onChange={(e) => setSelectedTag(e.target.value)}
-                    className="w-full max-w-md p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#6438C0]"
+                    className="w-full max-w-md p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#6438C0] cursor-pointer"
                 >
                     <option value="">All Tags</option>
                     {allTags.map((tag) => (
@@ -69,9 +69,24 @@ export default function Blogs() {
                 </select>
             </div>
 
-            {loading && <p className="text-gray-500 text-center">Loading...</p>}
-            {error && <p className="text-red-500 text-center">{error}</p>}
+            {/* Loader */}
+            {loading && (
+                <div className="flex justify-center items-center h-64">
+                    <div className="text-center">
+                        <div className="border-8 border-gray-300 border-t-8 border-t-[#6438C0] rounded-full w-16 h-16 mx-auto mb-4 animate-spin"></div>
+                        <p className="text-gray-600 text-lg font-medium">Loading blogs...</p>
+                    </div>
+                </div>
+            )}
 
+            {/* Error Message */}
+            {error && !loading && (
+                <div className="flex justify-center items-center h-64">
+                    <p className="text-red-500 text-center">{error}</p>
+                </div>
+            )}
+
+            {/* Blogs List */}
             {!loading && !error && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     {filteredBlogs.length > 0 ? (
