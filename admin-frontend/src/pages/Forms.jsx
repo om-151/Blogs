@@ -118,7 +118,7 @@ const BlogForm = ({ initialData = {}, onSubmit }) => {
         }
     };
 
-    const commonInputClass = "w-full p-2 border rounded focus:ring-2 focus:ring-purple-500 border-gray-300";
+    const commonInputClass = "w-full p-2 border rounded focus:ring-2 focus:ring-purple-500 border-gray-300 focus:outline-none";
 
     return (
         <form onSubmit={handleSubmit} className="max-w-3xl p-4 space-y-6 bg-white">
