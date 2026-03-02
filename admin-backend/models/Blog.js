@@ -14,6 +14,12 @@ const blogSchema = new mongoose.Schema(
     tags: [String],
     featuredImage: { type: String },
     published: { type: Boolean, default: true },
+    likes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Client",
+      },
+    ],
   },
   { timestamps: true }
 );

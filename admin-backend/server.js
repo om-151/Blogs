@@ -6,7 +6,10 @@ const cors = require("cors");
 dotenv.config();
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
+const clientRoutes = require("./routes/clientRoutes");
 const blogRoutes = require("./routes/blogRoutes");
+const contactRoutes = require("./routes/contactRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 
 connectDB();
@@ -18,7 +21,10 @@ if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 app.use('/uploads', express.static('public/uploads'));
 
 app.use("/api/auth", authRoutes);
+app.use("/api/clients", clientRoutes); // client sign-up/login & admin management
 app.use("/api/blogs", blogRoutes);
+app.use("/api/contacts", contactRoutes); // public contact form + admin listing
+app.use("/api/dashboard", dashboardRoutes); // dashboard statistics
 
 app.use(notFound);
 app.use(errorHandler);

@@ -37,10 +37,9 @@ const BlogManagement = () => {
             text: "You won't be able to revert this!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'Cancel'
+            confirmButtonColor: "#6366f1",
+            cancelButtonColor: "#d1d5db",
+            confirmButtonText: "Delete",
         });
 
         if (result.isConfirmed) {
@@ -81,7 +80,7 @@ const BlogManagement = () => {
             selector: (row) => row.title,
             sortable: true,
             grow: 1,
-            width: "400px",
+            width: "300px",
         },
         {
             name: "Slug",
@@ -119,6 +118,13 @@ const BlogManagement = () => {
             width: "150px",
         },
         {
+            name: "Likes",
+            selector: (row) => row.likesCount || 0,
+            sortable: true,
+            grow: 0,
+            width: "80px",
+        },
+        {
             name: "Actions",
             cell: (row) => (
                 <div className="flex gap-2 justify-center">
@@ -143,6 +149,27 @@ const BlogManagement = () => {
         },
     ];
 
+    const customStyles = {
+        headRow: {
+            style: {
+                backgroundColor: "#f9fafb",
+                borderBottom: "1px solid #e5e7eb",
+            },
+        },
+        rows: {
+            style: {
+                minHeight: "64px",
+                borderBottom: "1px solid #f1f5f9",
+            },
+        },
+        headCells: {
+            style: {
+                fontSize: "13px",
+                color: "#6b7280",
+            },
+        },
+    };
+
     return (
         <div className="p-6 bg-gray-50 min-h-screen">
             {/* Header */}
@@ -164,6 +191,7 @@ const BlogManagement = () => {
                     data={blogs}
                     pagination
                     highlightOnHover
+                    customStyles={customStyles}
                     striped
                     responsive
                     noHeader

@@ -36,19 +36,31 @@ const getBlogs = asyncHandler(async (req, res) => {
   const blogs = await Blog.find()
     .populate("author", "name email")
     .sort({ createdAt: -1 });
-  res.json(blogs);
+
+  // attach like count for convenience
+  const result = blogs.map((b) => ({
+    ...b.toObject(),
+    likesCount: b.likes ? b.likes.length : 0,
+  }));
+
+  res.json(result);
 });
 
 const getBlogById = asyncHandler(async (req, res) => {
-  const blog = await Blog.findById(req.params.id).populate(
-    "author",
-    "name email"
-  );
+  const blog = await Blog.findById(req.params.id)
+    .populate("author", "name email")
+    .populate("likes", "name");
   if (!blog) {
     res.status(404);
     throw new Error("Blog not found");
   }
-  res.json(blog);
+
+  const output = {
+    ...blog.toObject(),
+    likesCount: blog.likes ? blog.likes.length : 0,
+  };
+
+  res.json(output);
 });
 
 const updateBlog = asyncHandler(async (req, res) => {
@@ -84,4 +96,26 @@ const deleteBlog = asyncHandler(async (req, res) => {
   res.json({ message: "Blog removed successfully" });
 });
 
-module.exports = { createBlog, getBlogs, getBlogById, updateBlog, deleteBlog };
+// toggle like for a blog (user must be authenticated)
+const likeBlog = asyncHandler(async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+  if (!blog) {
+    res.status(404);
+    throw new Error("Blog not found");
+  }
+
+  const clientId = req.client._id.toString();
+  const existing = blog.likes.find((id) => id.toString() === clientId);
+  if (existing) {
+    // unlike
+    blog.likes = blog.likes.filter((id) => id.toString() !== clientId);
+  } else {
+    blog.likes.push(req.client._id);
+  }
+
+  const updated = await blog.save();
+  res.json(updated);
+});
+
+module.exports = { createBlog, getBlogs, getBlogById, updateBlog, deleteBlog, likeBlog };
+

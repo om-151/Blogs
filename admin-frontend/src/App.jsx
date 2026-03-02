@@ -2,6 +2,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import DashboardLayout from "./pages/DashboardLayout";
 import Login from "./pages/Login";
 import Blogs from "./pages/Blogs";
+import Comments from "./pages/Comments";
+import Clients from "./pages/Clients";
+import Contacts from "./pages/Contacts";
 import Home from "./pages/Home";
 import Create from "./pages/Create";
 import Edit from "./pages/Edit";
@@ -46,6 +49,9 @@ function App() {
           {/* Nested routes that render inside <Outlet /> */}
           <Route index element={<Home />} />
           <Route path="blogs" element={<Blogs />} />
+          <Route path="clients" element={<Clients />} />
+          <Route path="contacts" element={<Contacts />} />
+          <Route path="comments" element={<Comments />} />
           <Route path="blogs/create" element={<Create />} />
           <Route path="blogs/edit/:id" element={<Edit />} />
         </Route>

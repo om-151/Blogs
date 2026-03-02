@@ -1,172 +1,216 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { FileText, Users, CheckCircle2 } from "lucide-react";
+import { FileText, Users, MessageCircle, Mail, BarChart3 } from "lucide-react";
 import {
-    BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, AreaChart, Area, CartesianGrid
+    BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, AreaChart, Area, CartesianGrid, Legend
 } from "recharts";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-    const [blogs, setBlogs] = useState([]);
+    const [stats, setStats] = useState(null);
+    const [charts, setCharts] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const token = localStorage.getItem("token");
+    const navigate = useNavigate();
+
+    const axiosInstance = axios.create({
+        baseURL: "http://localhost:5000/api",
+        headers: { Authorization: `Bearer ${token}` },
+    });
+
+    const fetchDashboardData = async () => {
+        setLoading(true);
+        if (!token) {
+            setError("Not authenticated. Please sign in.");
+            setLoading(false);
+            setTimeout(() => navigate("/", { replace: true }), 500);
+            return;
+        }
+        try {
+            const res = await axiosInstance.get("/dashboard/stats");
+            setStats(res.data.stats);
+            setCharts(res.data.charts);
+            setError("");
+        } catch (err) {
+            console.error("Dashboard fetch error:", err);
+            setError(err.response?.data?.message || err.message || "Failed to load dashboard data");
+            const status = err.response?.status;
+            if (status === 401 || status === 403) {
+                localStorage.removeItem("token");
+                setTimeout(() => navigate("/", { replace: true }), 700);
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchBlogs = async () => {
-            try {
-                const res = await axios.get("http://localhost:5000/api/blogs");
-                setBlogs(res.data);
-                setLoading(false);
-            } catch (err) {
-                setError("Failed to load blogs");
-                setLoading(false);
-            }
-        };
-        fetchBlogs();
+        fetchDashboardData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const stats = [
+    const handleRefresh = () => fetchDashboardData();
+
+    const statCards = [
         {
             title: "Total Blogs",
-            value: blogs.length,
-            icon: <FileText size={32} className="text-indigo-500" />,
+            value: stats?.totalBlogs || 0,
+            icon: <FileText size={28} className="text-[#6438C0]" />,
+            color: "indigo",
         },
         {
-            title: "Active Users",
-            value: 85,
-            icon: <Users size={32} className="text-green-500" />,
+            title: "Active Clients",
+            value: stats?.totalClients || 0,
+            icon: <Users size={28} className="text-[#6438C0]" />,
+            color: "green",
         },
         {
-            title: "Pending Reviews",
-            value: 14,
-            icon: <CheckCircle2 size={32} className="text-yellow-500" />,
+            title: "Total Comments",
+            value: stats?.totalComments || 0,
+            icon: <MessageCircle size={28} className="text-[#6438C0]" />,
+            color: "purple",
         },
-    ];
-
-    // Static data for charts
-    const barData = [
-        { name: "Jan", blogs: 12 },
-        { name: "Feb", blogs: 18 },
-        { name: "Mar", blogs: 10 },
-        { name: "Apr", blogs: 22 },
-        { name: "May", blogs: 15 },
+        {
+            title: "Contact Messages",
+            value: stats?.totalContacts || 0,
+            icon: <Mail size={28} className="text-[#6438C0]" />,
+            color: "orange",
+        },
     ];
 
     const pieData = [
-        { name: "Published", value: 70 },
-        { name: "Drafts", value: 30 },
+        { name: "Published", value: stats?.publishedBlogs || 0 },
+        { name: "Drafts", value: stats?.draftBlogs || 0 },
     ];
 
-    const lineData = [
-        { name: "Week 1", users: 30 },
-        { name: "Week 2", users: 45 },
-        { name: "Week 3", users: 60 },
-        { name: "Week 4", users: 50 },
-    ];
+    const COLORS = ["#6438C0", "#f59e0b"];
 
-    const areaData = [
-        { name: "Mon", visitors: 400 },
-        { name: "Tue", visitors: 300 },
-        { name: "Wed", visitors: 500 },
-        { name: "Thu", visitors: 200 },
-        { name: "Fri", visitors: 278 },
-        { name: "Sat", visitors: 300 },
-        { name: "Sun", visitors: 450 },
-    ];
+    const formatNumber = (n) => {
+        if (!n && n !== 0) return 0;
+        return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
 
-    const COLORS = ["#4f46e5", "#facc15"];
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
+    };
+
+    const itemVariants = { hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0, transition: { duration: 0.35 } } };
 
     return (
-        <div className="p-6 bg-gray-100 min-h-screen">
+        <div className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+            <div className="mb-6 flex items-center justify-between">
+                <div>
+                    <h1 className="text-3xl font-extrabold text-gray-900">Admin Dashboard</h1>
+                    <p className="text-sm text-gray-600 mt-1">Overview of your blog platform performance</p>
+                </div>
+                <div className="flex items-center gap-3">
+                    <button onClick={handleRefresh} className="inline-flex items-center gap-2 px-4 py-2 bg-white border rounded-lg shadow-sm text-sm text-gray-700 hover:bg-gray-50 cursor-pointer">Refresh</button>
+                </div>
+            </div>
+
             {loading ? (
-                <div className="text-center text-gray-500">Loading...</div>
+                <div className="flex items-center justify-center h-64">
+                    <div className="animate-spin rounded-full h-14 w-14 border-b-4 border-indigo-600"/>
+                </div>
             ) : error ? (
-                <div className="text-center text-red-500">{error}</div>
+                <div className="text-center text-red-600 py-12">Error fetching dashboard stats — {error}</div>
             ) : (
                 <>
-                    {/* Stats Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                        {stats.map((item, index) => (
-                            <motion.div
-                                key={index}
-                                whileHover={{ scale: 1.05 }}
-                                className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-5 border-l-4 border-indigo-500"
-                            >
-                                <div className="flex items-center space-x-4">
-                                    <div className="p-3 bg-indigo-50 rounded-full">
-                                        {item.icon}
-                                    </div>
+                    <motion.div variants={containerVariants} initial="hidden" animate="visible" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        {statCards.map((card, i) => (
+                            <motion.div key={i} variants={itemVariants} whileHover={{ scale: 1.02 }} className="bg-white p-5 rounded-xl shadow-sm">
+                                <div className="flex items-start justify-between">
                                     <div>
-                                        <h3 className="text-gray-500 text-sm font-medium">{item.title}</h3>
-                                        <p className="text-2xl font-bold text-gray-800">{item.value}</p>
+                                        <h4 className="text-xs text-gray-500">{card.title}</h4>
+                                        <p className="mt-2 text-2xl font-semibold text-gray-900">{formatNumber(card.value)}</p>
+                                    </div>
+                                    <div className="p-3 rounded-lg" style={{ background: 'rgba(99,102,241,0.06)' }}>
+                                        {card.icon}
                                     </div>
                                 </div>
                             </motion.div>
                         ))}
-                    </div>
+                    </motion.div>
 
-                    {/* Charts Grid – Two per row */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Bar Chart */}
-                        <div className="bg-white p-6 rounded-xl shadow-md h-[350px]">
-                            <h3 className="text-lg font-semibold text-gray-700">Monthly Blogs</h3>
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={barData}>
-                                    <XAxis dataKey="name" stroke="#8884d8" />
-                                    <YAxis />
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div className="bg-white p-6 rounded-xl shadow-sm">
+                            <div className="flex items-center justify-between mb-4">
+                                <h3 className="text-lg font-semibold text-gray-800">Blogs Per Month</h3>
+                                <div className="text-sm text-gray-500">Last 6 months</div>
+                            </div>
+                            <ResponsiveContainer width="100%" height={280}>
+                                <BarChart data={charts?.blogsPerMonth || []}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#e6e6f0" />
+                                    <XAxis dataKey="name" stroke="#9ca3af" />
+                                    <YAxis stroke="#9ca3af" />
                                     <Tooltip />
-                                    <Bar dataKey="blogs" fill="#4f46e5" />
+                                    <Bar dataKey="blogs" fill="#4f46e5" radius={[6,6,0,0]} />
                                 </BarChart>
                             </ResponsiveContainer>
                         </div>
 
-                        {/* Pie Chart */}
-                        <div className="bg-white p-6 rounded-xl shadow-md h-[350px]">
-                            <h3 className="text-lg font-semibold text-gray-700">Blog Status</h3>
-                            <ResponsiveContainer width="100%" height="100%">
+                        <div className="bg-white p-6 rounded-xl shadow-sm">
+                            <div className="flex items-center justify-between mb-4">
+                                <h3 className="text-lg font-semibold text-gray-800">Blog Status</h3>
+                                <div className="text-sm text-gray-500">Distribution</div>
+                            </div>
+                            <ResponsiveContainer width="100%" height={280}>
                                 <PieChart>
-                                    <Pie
-                                        data={pieData}
-                                        dataKey="value"
-                                        nameKey="name"
-                                        cx="50%"
-                                        cy="50%"
-                                        outerRadius={80}
-                                        fill="#8884d8"
-                                        label
-                                    >
-                                        {pieData.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                    <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
+                                        {pieData.map((entry, idx) => (
+                                            <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
                                         ))}
                                     </Pie>
                                     <Tooltip />
+                                    <Legend />
                                 </PieChart>
                             </ResponsiveContainer>
                         </div>
 
-                        {/* Line Chart */}
-                        <div className="bg-white p-6 rounded-xl shadow-md h-[350px]">
-                            <h3 className="text-lg font-semibold text-gray-700">Weekly Users</h3>
-                            <ResponsiveContainer width="100%" height="100%">
-                                <LineChart data={lineData}>
-                                    <XAxis dataKey="name" stroke="#8884d8" />
-                                    <YAxis />
+                        <div className="bg-white p-6 rounded-xl shadow-sm">
+                            <h3 className="text-lg font-semibold text-gray-800 mb-4">Weekly Client Registrations</h3>
+                            <ResponsiveContainer width="100%" height={240}>
+                                <LineChart data={charts?.clientsPerWeek || []}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#e6e6f0" />
+                                    <XAxis dataKey="name" stroke="#9ca3af" />
+                                    <YAxis stroke="#9ca3af" />
                                     <Tooltip />
-                                    <Line type="monotone" dataKey="users" stroke="#4f46e5" strokeWidth={2} />
+                                    <Line type="monotone" dataKey="users" stroke="#10b981" strokeWidth={2} />
                                 </LineChart>
                             </ResponsiveContainer>
                         </div>
 
-                        {/* Area Chart */}
-                        <div className="bg-white p-6 rounded-xl shadow-md h-[350px]">
-                            <h3 className="text-lg font-semibold text-gray-700">Daily Visitors</h3>
-                            <ResponsiveContainer width="100%" height="100%">
-                                <AreaChart data={areaData}>
-                                    <XAxis dataKey="name" stroke="#8884d8" />
-                                    <YAxis />
-                                    <CartesianGrid strokeDasharray="3 3" />
+                        <div className="bg-white p-6 rounded-xl shadow-sm">
+                            <div className="flex items-center justify-between mb-4">
+                                <h3 className="text-lg font-semibold text-gray-800">Comments This Week</h3>
+                                <div className="text-sm text-gray-500">Last 7 days</div>
+                            </div>
+                            <ResponsiveContainer width="100%" height={240}>
+                                <AreaChart data={charts?.commentsPerDay || []}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#e6e6f0" />
+                                    <XAxis dataKey="name" stroke="#9ca3af" />
+                                    <YAxis stroke="#9ca3af" />
                                     <Tooltip />
-                                    <Area type="monotone" dataKey="visitors" stroke="#4f46e5" fill="#c7d2fe" />
+                                    <Area type="monotone" dataKey="comments" stroke="#8b5cf6" fill="#f3e8ff" />
+                                </AreaChart>
+                            </ResponsiveContainer>
+                        </div>
+
+                        <div className="bg-white p-6 rounded-xl shadow-sm lg:col-span-2">
+                            <div className="flex items-center justify-between mb-4">
+                                <h3 className="text-lg font-semibold text-gray-800">Weekly Contact Messages</h3>
+                                <div className="text-sm text-gray-500">Last 7 days</div>
+                            </div>
+                            <ResponsiveContainer width="100%" height={300}>
+                                <AreaChart data={charts?.dailyVisitors || []}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#e6e6f0" />
+                                    <XAxis dataKey="name" stroke="#9ca3af" />
+                                    <YAxis stroke="#9ca3af" />
+                                    <Tooltip />
+                                    <Area type="monotone" dataKey="visitors" stroke="#fb923c" fill="#fff7ed" />
                                 </AreaChart>
                             </ResponsiveContainer>
                         </div>

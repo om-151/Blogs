@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { Heart } from "lucide-react";
 
 export default function BlogCard({ blog }) {
     const navigate = useNavigate();
@@ -39,6 +40,10 @@ export default function BlogCard({ blog }) {
                 <div className="flex justify-between items-center text-gray-500 text-sm mt-2">
                     <p>By <span className="font-medium text-gray-700">{blog.author.name}</span></p>
                     <p>{formatDate(blog.createdAt)}</p>
+                </div>
+                <div className="flex items-center text-gray-500 text-sm mt-2 space-x-1">
+                    <Heart size={16} className="text-red-500" fill="currentColor" />
+                    <span>{blog.likesCount || 0}</span>
                 </div>
                 <button
                     onClick={() => navigate(`/blogs/${blog._id || blog.id}`)}

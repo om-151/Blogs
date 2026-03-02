@@ -1,4 +1,4 @@
-import { LayoutDashboard, FileText, Menu, LogOut } from "lucide-react";
+import { LayoutDashboard, FileText, MessageSquare, Users, Mail, Menu, LogOut } from "lucide-react";
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Swal from 'sweetalert2';
@@ -70,6 +70,30 @@ export default function Sidebar({ setIsAuthenticated }) {
                 >
                     <FileText size={20} />
                     {isOpen && "Blog Management"}
+                </button>
+                <button
+                    onClick={() => navigate("/dashboard/comments")}
+                    className={`flex items-center gap-3 w-full px-4 py-2 rounded-lg text-left transition cursor-pointer ${isActive("/dashboard/comments") ? "bg-indigo-600" : "hover:bg-indigo-600"
+                        }`}
+                >
+                    <MessageSquare size={20} />
+                    {isOpen && "Comments"}
+                </button>
+                <button
+                    onClick={() => navigate("/dashboard/clients")}
+                    className={`flex items-center gap-3 w-full px-4 py-2 rounded-lg text-left transition cursor-pointer ${isActive("/dashboard/clients") ? "bg-indigo-600" : "hover:bg-indigo-600"
+                        }`}
+                >
+                    <Users size={20} />
+                    {isOpen && "Users"}
+                </button>
+                <button
+                    onClick={() => navigate("/dashboard/contacts")}
+                    className={`flex items-center gap-3 w-full px-4 py-2 rounded-lg text-left transition cursor-pointer ${isActive("/dashboard/contacts") ? "bg-indigo-600" : "hover:bg-indigo-600"
+                        }`}
+                >
+                    <Mail size={20} />
+                    {isOpen && "Contacts"}
                 </button>
             </nav>
 

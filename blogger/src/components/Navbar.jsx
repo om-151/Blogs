@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { useLocation, Link } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({ clientAuth, handleLogout }) => {
     const [navOpen, setNavOpen] = useState(false);
     const location = useLocation();
 
@@ -14,6 +14,8 @@ const Navbar = () => {
         { name: "About", href: "/about" },
         { name: "Contact", href: "/contact" },
     ];
+    // authentication related
+    const isLoggedIn = !!clientAuth;
 
     return (
         <header className="w-full shadow-md fixed top-0 left-0 bg-white z-50">
@@ -37,6 +39,30 @@ const Navbar = () => {
                             {link.name}
                         </Link>
                     ))}
+                    {!isLoggedIn && (
+                        <>
+                            <Link
+                                to="/login"
+                                className="font-medium text-gray-700 hover:text-purple-800 cursor-pointer"
+                            >
+                                Login
+                            </Link>
+                            <Link
+                                to="/register"
+                                className="font-medium text-gray-700 hover:text-purple-800 cursor-pointer"
+                            >
+                                Register
+                            </Link>
+                        </>
+                    )}
+                    {isLoggedIn && (
+                        <button
+                            onClick={handleLogout}
+                            className="font-medium text-gray-700 hover:text-purple-800 cursor-pointer"
+                        >
+                            Logout
+                        </button>
+                    )}
                 </nav>
 
                 {/* Mobile Menu Icon */}
@@ -63,6 +89,35 @@ const Navbar = () => {
                             {link.name}
                         </Link>
                     ))}
+                    {!isLoggedIn && (
+                        <>
+                            <Link
+                                to="/login"
+                                className="block py-2 font-medium text-gray-700 hover:text-purple-800 cursor-pointer"
+                                onClick={() => setNavOpen(false)}
+                            >
+                                Login
+                            </Link>
+                            <Link
+                                to="/register"
+                                className="block py-2 font-medium text-gray-700 hover:text-purple-800 cursor-pointer"
+                                onClick={() => setNavOpen(false)}
+                            >
+                                Register
+                            </Link>
+                        </>
+                    )}
+                    {isLoggedIn && (
+                        <button
+                            onClick={() => {
+                                handleLogout();
+                                setNavOpen(false);
+                            }}
+                            className="block py-2 font-medium text-gray-700 hover:text-purple-800 cursor-pointer"
+                        >
+                            Logout
+                        </button>
+                    )}
                 </div>
             )}
         </header>
