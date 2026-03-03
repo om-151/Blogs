@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Blog = require("../models/Blog");
+const Comment = require("../models/Comment");
 const slugify = require("slugify");
 
 const createBlog = asyncHandler(async (req, res) => {
@@ -37,11 +38,18 @@ const getBlogs = asyncHandler(async (req, res) => {
     .populate("author", "name email")
     .sort({ createdAt: -1 });
 
-  // attach like count for convenience
-  const result = blogs.map((b) => ({
-    ...b.toObject(),
-    likesCount: b.likes ? b.likes.length : 0,
-  }));
+  // attach like and comment counts for convenience
+  const result = await Promise.all(
+    blogs.map(async (b) => {
+      const likesCount = b.likes ? b.likes.length : 0;
+      const commentsCount = await Comment.countDocuments({ blog: b._id });
+      return {
+        ...b.toObject(),
+        likesCount,
+        commentsCount,
+      };
+    })
+  );
 
   res.json(result);
 });
@@ -55,9 +63,13 @@ const getBlogById = asyncHandler(async (req, res) => {
     throw new Error("Blog not found");
   }
 
+  const likesCount = blog.likes ? blog.likes.length : 0;
+  const commentsCount = await Comment.countDocuments({ blog: blog._id });
+
   const output = {
     ...blog.toObject(),
-    likesCount: blog.likes ? blog.likes.length : 0,
+    likesCount,
+    commentsCount,
   };
 
   res.json(output);

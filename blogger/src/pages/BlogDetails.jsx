@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Heart } from "lucide-react";
+import Swal from "sweetalert2";
 import axios from "axios";
 
 export default function BlogDetails({ clientAuth }) {
@@ -58,10 +59,15 @@ export default function BlogDetails({ clientAuth }) {
 
     const handleLike = async () => {
         if (!clientToken) {
-            alert('Please login to like this post');
+            Swal.fire({
+                icon: "warning",
+                title: "Login Required",
+                text: "Please login to like this post.",
+                confirmButtonColor: "#6438C0",
+            });
             return;
         }
-        // console.log(blog?.isLiked, 'KKKKKKKKK')
+
         try {
             await axios.post(
                 `http://localhost:5000/api/blogs/${id}/like`,
@@ -79,7 +85,12 @@ export default function BlogDetails({ clientAuth }) {
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
         if (!clientToken) {
-            alert('Please login to comment');
+            Swal.fire({
+                icon: "warning",
+                title: "Login Required",
+                text: "Please login to comment.",
+                confirmButtonColor: "#6438C0",
+            });
             return;
         }
         if (!newComment.trim()) return;
@@ -93,12 +104,27 @@ export default function BlogDetails({ clientAuth }) {
             const res = await axios.get(`http://localhost:5000/api/blogs/${id}/comments`);
             setComments(res.data);
         } catch (err) {
-            alert(err.response?.data?.message || 'Error posting comment');
+            Swal.fire({
+                icon: "error",
+                title: "Failed",
+                text: err.response?.data?.message || "Error posting comment",
+                confirmButtonColor: "#d33",
+            });
         }
     };
 
     const handleDeleteComment = async (commentId) => {
-        if (!window.confirm('Delete this comment?')) return;
+        const result = await Swal.fire({
+            title: "Are you sure?",
+            text: "This comment will be deleted permanently.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#6b7280",
+            confirmButtonText: "Yes, delete it!",
+        });
+
+        if (!result.isConfirmed) return;
         try {
             await axios.delete(
                 `http://localhost:5000/api/blogs/client-comments/${commentId}`,
@@ -107,7 +133,12 @@ export default function BlogDetails({ clientAuth }) {
             const res = await axios.get(`http://localhost:5000/api/blogs/${id}/comments`);
             setComments(res.data);
         } catch (err) {
-            alert('Error deleting comment');
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Error deleting comment",
+                confirmButtonColor: "#d33",
+            });
         }
     };
 
@@ -123,7 +154,12 @@ export default function BlogDetails({ clientAuth }) {
             const res = await axios.get(`http://localhost:5000/api/blogs/${id}/comments`);
             setComments(res.data);
         } catch (err) {
-            alert('Error updating comment');
+            Swal.fire({
+                icon: "error",
+                title: "Update Failed",
+                text: "Error updating comment",
+                confirmButtonColor: "#d33",
+            });
         }
     };
 

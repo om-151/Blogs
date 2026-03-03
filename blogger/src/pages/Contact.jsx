@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { MapPin, Mail, Phone } from "lucide-react";
+import Swal from "sweetalert2";
 
 const ContactPage = () => {
     const [form, setForm] = useState({
@@ -9,7 +11,6 @@ const ContactPage = () => {
     });
 
     const [errors, setErrors] = useState({});
-    const [status, setStatus] = useState(null);
     const [loading, setLoading] = useState(false);
 
     // Handle Input Change
@@ -51,7 +52,6 @@ const ContactPage = () => {
     // Handle Submit
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setStatus(null);
 
         const validationErrors = validate();
 
@@ -64,23 +64,23 @@ const ContactPage = () => {
             setLoading(true);
             await axios.post("http://localhost:5000/api/contacts", form);
 
-            setStatus({
-                type: "success",
-                message: "✅ Your message has been sent successfully!"
+            Swal.fire({
+                icon: "success",
+                title: "Message Sent!",
+                text: "Your message has been sent successfully.",
+                confirmButtonColor: "#6438C0",
             });
 
             setForm({ name: "", email: "", message: "" });
-
-            // Auto remove success message after 4 seconds
-            setTimeout(() => {
-                setStatus(null);
-            }, 4000);
+            setErrors({});
         } catch (err) {
-            setStatus({
-                type: "error",
-                message:
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text:
                     err.response?.data?.message ||
-                    "❌ Failed to send message. Please try again."
+                    "Failed to send message. Please try again.",
+                confirmButtonColor: "#d33",
             });
         } finally {
             setLoading(false);
@@ -192,18 +192,6 @@ const ContactPage = () => {
                             {loading ? "Sending..." : "Send Message"}
                         </button>
                     </form>
-
-                    {/* Status Message */}
-                    {status && (
-                        <div
-                            className={`mt-5 p-4 rounded-xl text-sm font-medium ${status.type === "success"
-                                ? "bg-green-100 text-green-700"
-                                : "bg-red-100 text-red-700"
-                                }`}
-                        >
-                            {status.message}
-                        </div>
-                    )}
                 </div>
 
                 {/* Contact Info */}
@@ -216,9 +204,20 @@ const ContactPage = () => {
                     </p>
 
                     <div className="space-y-3 text-gray-700">
-                        <p>📍 123 Blogger Street, Tech City, India</p>
-                        <p>📧 support@blogger.com</p>
-                        <p>📞 +91 98765 43210</p>
+                        <div className="flex items-center gap-3">
+                            <MapPin className="w-5 h-5 text-[#6438C0]" />
+                            <p>123 Blogger Street, Tech City, India</p>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <Mail className="w-5 h-5 text-[#6438C0]" />
+                            <p>support@blogger.com</p>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <Phone className="w-5 h-5 text-[#6438C0]" />
+                            <p>+91 98765 43210</p>
+                        </div>
                     </div>
 
                     {/* Map */}
