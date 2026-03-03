@@ -79,12 +79,14 @@ const Comments = () => {
                 </div>
             ),
             grow: 2,
+            width: "220px",
         },
         {
             name: "Blog",
             selector: (row) => row.blog?.title || "-",
             sortable: true,
             grow: 2,
+            width: "300px",
         },
         {
             name: "Comment",
@@ -94,11 +96,13 @@ const Comments = () => {
                 </p>
             ),
             grow: 2,
+            width: "300px",
         },
         {
             name: "Date",
             selector: (row) => formatDate(row.createdAt),
             sortable: true,
+            grow: 2,
         },
         {
             name: "Actions",
@@ -112,7 +116,7 @@ const Comments = () => {
                 </button>
             ),
             width: "80px",
-            grow: 0,
+            grow: 1,
         },
     ];
 
@@ -138,16 +142,14 @@ const Comments = () => {
     };
 
     return (
-        <div className="p-8 bg-gray-50 min-h-screen">
+        <div className="p-6 bg-gray-50 min-h-screen">
             {/* Header */}
-            <div className="mb-6">
-                <h2 className="text-2xl font-semibold text-gray-700">
-                    Comment Management
-                </h2>
-            </div>
+            <h2 className="text-2xl font-semibold text-gray-700 mb-6">
+                Comment Management
+            </h2>
 
             {/* Table */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="bg-white rounded-lg shadow-md p-4">
                 <DataTable
                     columns={columns}
                     data={comments}

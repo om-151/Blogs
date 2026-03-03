@@ -118,7 +118,7 @@ const Home = () => {
                                         <h4 className="text-xs text-gray-500">{card.title}</h4>
                                         <p className="mt-2 text-2xl font-semibold text-gray-900">{formatNumber(card.value)}</p>
                                     </div>
-                                    <div className="p-3 rounded-lg" style={{ background: 'rgba(99,102,241,0.06)' }}>
+                                    <div className="p-3 rounded-lg">
                                         {card.icon}
                                     </div>
                                 </div>

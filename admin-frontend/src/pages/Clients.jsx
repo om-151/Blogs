@@ -132,6 +132,11 @@ const Clients = () => {
                     striped
                     responsive
                     noHeader
+                    noDataComponent={
+                        <div className="py-12 text-gray-400">
+                            No User available.
+                        </div>
+                    }
                 />
             </div>
         </div>
