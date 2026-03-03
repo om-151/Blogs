@@ -32,8 +32,8 @@ const Navbar = ({ clientAuth, handleLogout }) => {
                             key={link.name}
                             to={link.href}
                             className={`font-medium transition-colors duration-300 ${location.pathname === link.href
-                                    ? "text-[#6438C0] underline"
-                                    : "text-gray-700 hover:text-purple-800"
+                                ? "text-[#6438C0] underline"
+                                : "text-gray-700 hover:text-purple-800"
                                 }`}
                         >
                             {link.name}
@@ -43,13 +43,19 @@ const Navbar = ({ clientAuth, handleLogout }) => {
                         <>
                             <Link
                                 to="/login"
-                                className="font-medium text-gray-700 hover:text-purple-800 cursor-pointer"
+                                className={`font-medium transition-colors duration-300 ${location.pathname === "/login"
+                                    ? "text-[#6438C0] underline"
+                                    : "text-gray-700 hover:text-purple-800"
+                                    }`}
                             >
                                 Login
                             </Link>
                             <Link
                                 to="/register"
-                                className="font-medium text-gray-700 hover:text-purple-800 cursor-pointer"
+                                className={`font-medium transition-colors duration-300 ${location.pathname === "/register"
+                                    ? "text-[#6438C0] underline"
+                                    : "text-gray-700 hover:text-purple-800"
+                                    }`}
                             >
                                 Register
                             </Link>
@@ -81,8 +87,8 @@ const Navbar = ({ clientAuth, handleLogout }) => {
                             key={link.name}
                             to={link.href}
                             className={`block py-2 font-medium transition ${location.pathname === link.href
-                                    ? "text-[#6438C0] underline"
-                                    : "text-gray-700 hover:text-purple-800"
+                                ? "text-[#6438C0] underline"
+                                : "text-gray-700 hover:text-purple-800"
                                 }`}
                             onClick={() => setNavOpen(false)}
                         >
@@ -93,14 +99,20 @@ const Navbar = ({ clientAuth, handleLogout }) => {
                         <>
                             <Link
                                 to="/login"
-                                className="block py-2 font-medium text-gray-700 hover:text-purple-800 cursor-pointer"
                                 onClick={() => setNavOpen(false)}
+                                className={`block py-2 font-medium transition ${location.pathname === "/login"
+                                    ? "text-[#6438C0] underline"
+                                    : "text-gray-700 hover:text-purple-800"
+                                    }`}
                             >
                                 Login
                             </Link>
                             <Link
                                 to="/register"
-                                className="block py-2 font-medium text-gray-700 hover:text-purple-800 cursor-pointer"
+                                className={`block py-2 font-medium transition ${location.pathname === "/register"
+                                    ? "text-[#6438C0] underline"
+                                    : "text-gray-700 hover:text-purple-800"
+                                    }`}
                                 onClick={() => setNavOpen(false)}
                             >
                                 Register

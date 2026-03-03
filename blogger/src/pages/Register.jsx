@@ -101,7 +101,7 @@ export default function Register({ setClientAuth }) {
             </div>
 
             {/* Right Side */}
-            <div className="flex w-full md:w-1/2 items-center justify-center bg-gray-50 p-6">
+            <div className="flex w-full md:w-1/2 items-center justify-center p-6">
                 <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl">
                     <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
                         Create Account
