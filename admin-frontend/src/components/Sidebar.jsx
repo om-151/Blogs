@@ -39,7 +39,7 @@ export default function Sidebar({ setIsAuthenticated }) {
     const isActive = (path) => location.pathname === path;
 
     return (
-        <div className={`${isOpen ? "w-64" : "w-20"} h-screen bg-indigo-700 text-white flex flex-col transition-all duration-300`}>
+        <div className={`${isOpen ? "w-64" : "w-20"} h-screen bg-[#6438C0] text-white flex flex-col transition-all duration-300`}>
             {/* Header */}
             <div className={`flex items-center justify-${isOpen ? "between" : "center"} p-4 border-b border-indigo-500`}>
                 {isOpen && (
@@ -57,7 +57,7 @@ export default function Sidebar({ setIsAuthenticated }) {
             <nav className="flex-1 p-4 space-y-2">
                 <button
                     onClick={() => navigate("/dashboard")}
-                    className={`flex items-center gap-3 w-full px-4 py-2 rounded-lg text-left transition cursor-pointer ${isActive("/dashboard") ? "bg-indigo-600" : "hover:bg-indigo-600"
+                    className={`flex items-center gap-3 w-full px-4 py-2 rounded-lg text-left transition cursor-pointer ${isActive("/dashboard") ? "bg-purple-600" : "hover:bg-purple-600"
                         }`}
                 >
                     <LayoutDashboard size={20} />
@@ -65,7 +65,7 @@ export default function Sidebar({ setIsAuthenticated }) {
                 </button>
                 <button
                     onClick={() => navigate("/dashboard/blogs")}
-                    className={`flex items-center gap-3 w-full px-4 py-2 rounded-lg text-left transition cursor-pointer ${isActive("/dashboard/blogs") ? "bg-indigo-600" : "hover:bg-indigo-600"
+                    className={`flex items-center gap-3 w-full px-4 py-2 rounded-lg text-left transition cursor-pointer ${isActive("/dashboard/blogs") ? "bg-purple-600" : "hover:bg-purple-600"
                         }`}
                 >
                     <FileText size={20} />
@@ -73,7 +73,7 @@ export default function Sidebar({ setIsAuthenticated }) {
                 </button>
                 <button
                     onClick={() => navigate("/dashboard/comments")}
-                    className={`flex items-center gap-3 w-full px-4 py-2 rounded-lg text-left transition cursor-pointer ${isActive("/dashboard/comments") ? "bg-indigo-600" : "hover:bg-indigo-600"
+                    className={`flex items-center gap-3 w-full px-4 py-2 rounded-lg text-left transition cursor-pointer ${isActive("/dashboard/comments") ? "bg-purple-600" : "hover:bg-purple-600"
                         }`}
                 >
                     <MessageSquare size={20} />
@@ -81,7 +81,7 @@ export default function Sidebar({ setIsAuthenticated }) {
                 </button>
                 <button
                     onClick={() => navigate("/dashboard/clients")}
-                    className={`flex items-center gap-3 w-full px-4 py-2 rounded-lg text-left transition cursor-pointer ${isActive("/dashboard/clients") ? "bg-indigo-600" : "hover:bg-indigo-600"
+                    className={`flex items-center gap-3 w-full px-4 py-2 rounded-lg text-left transition cursor-pointer ${isActive("/dashboard/clients") ? "bg-purple-600" : "hover:bg-purple-600"
                         }`}
                 >
                     <Users size={20} />
@@ -89,7 +89,7 @@ export default function Sidebar({ setIsAuthenticated }) {
                 </button>
                 <button
                     onClick={() => navigate("/dashboard/contacts")}
-                    className={`flex items-center gap-3 w-full px-4 py-2 rounded-lg text-left transition cursor-pointer ${isActive("/dashboard/contacts") ? "bg-indigo-600" : "hover:bg-indigo-600"
+                    className={`flex items-center gap-3 w-full px-4 py-2 rounded-lg text-left transition cursor-pointer ${isActive("/dashboard/contacts") ? "bg-purple-600" : "hover:bg-purple-600"
                         }`}
                 >
                     <Mail size={20} />

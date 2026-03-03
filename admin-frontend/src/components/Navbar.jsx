@@ -4,7 +4,7 @@ export default function Navbar() {
     return (
         <div className="h-16 bg-white shadow flex items-center justify-between px-6 sticky top-0 z-10">
             {/* Left - Logo / Title */}
-            <h2 className="text-xl font-semibold text-gray-700">Blogger Admin panel</h2>
+            <h2 className="text-xl font-semibold text-gray-700">Admin panel</h2>
 
             {/* Right - Search + Notifications + Profile */}
             <div className="flex items-center gap-4">
