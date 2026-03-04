@@ -28,6 +28,7 @@ const Footer = () => {
     return (
         <>
             <footer className="bg-white text-gray-700 relative">
+                <div className="h-[2px] bg-gradient-to-r from-transparent via-[#6338c0c3] to-transparent" />
                 {/* Top Section */}
                 <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {/* Logo + About */}
